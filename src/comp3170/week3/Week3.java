@@ -6,6 +6,8 @@ import static org.lwjgl.opengl.GL41.*;
 import java.io.File;
 import java.io.IOException;
 
+import org.joml.Matrix4f;
+
 import comp3170.OpenGLException;
 import comp3170.IWindowListener;
 import comp3170.Shader;
@@ -13,6 +15,8 @@ import comp3170.ShaderLibrary;
 import comp3170.Window;
 
 public class Week3 implements IWindowListener {
+
+	private static final float TAU = (float) (2 * Math.PI);
 
 	private Window window;
 	private Shader shader;
@@ -22,8 +26,6 @@ public class Week3 implements IWindowListener {
 	private int width = 800;
 	private int height = 800;
 	private Scene scene;
-	
-	private float lastFrameTime = 0;
 	
 	public Week3() throws OpenGLException  {
 		
@@ -48,13 +50,13 @@ public class Week3 implements IWindowListener {
 		
 	}
 
-
+	private float lastFrameTime = System.currentTimeMillis() / 1000f;
+	
 	@Override
 	public void draw() {
-		
 		 // Compute deltaTime
-	    float currentTime = (float) System.currentTimeMillis();
-	    float deltaTime = (currentTime - lastFrameTime)/ 1000f;
+	    float currentTime = (float) System.currentTimeMillis() / 1000f;
+	    float deltaTime = currentTime - lastFrameTime;
 	    lastFrameTime = currentTime;
 
         // clear the colour buffer
@@ -63,6 +65,7 @@ public class Week3 implements IWindowListener {
 		scene.draw(deltaTime);
 	    
 	}
+	
 
 	@Override
 	public void resize(int width, int height) {

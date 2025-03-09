@@ -32,7 +32,7 @@ public class Scene {
 	private Shader shader;
 	
 	private Matrix4f modelMatrix;
-	private float time = 0;
+
 
 	public Scene() {
 		modelMatrix = new Matrix4f().identity();
@@ -83,27 +83,26 @@ public class Scene {
 		indexBuffer = GLBuffers.createIndexBuffer(indices);
 
 	}
+	
+	private static final float TAU = (float) (2 * Math.PI);
+	private static final float ROTATION_SPEED = TAU / 6;
+	private float time = 0;
+	float radius = 0.5f; 
 
 	public void draw(float  deltaTime) {
 		
 		// Increment time
 	    time += deltaTime;
-
-	    // Set circular motion parameters
-	    float radius = 0.5f;  // Radius of the circular path
-	    float centerX = 0.0f; // Circle center X
-	    float centerY = 0.0f; // Circle center Y
-	    float speed = 1.0f;   // Rotation speed in radians per second
 	    
 	    // Compute circular path position using sine and cosine
-	    float x = centerX + radius * (float) Math.cos(speed * time);
-	    float y = centerY + radius * (float) Math.sin(speed * time);
+	    float x = radius * (float) Math.cos(ROTATION_SPEED * time);
+	    float y = radius * (float) Math.sin(ROTATION_SPEED * time);
 	    
 	 // Update model matrix with translation
 	    modelMatrix.identity()
 	        .translate(x, y, 0)
-	        .rotate(speed * time, 0, 0, 1) // Rotate with motion
-	        .scale(0.2f, 0.2f, 1.0f); // Keep the object small
+	        .rotate(ROTATION_SPEED * time, 0, 0, 1) // Rotate with motion
+	        .scale(0.1f, 0.1f, 1.0f); // Keep the object small
 
 		
 		shader.enable();
