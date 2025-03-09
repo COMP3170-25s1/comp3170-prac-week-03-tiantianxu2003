@@ -1,15 +1,20 @@
 #version 410
 
-in vec4 a_position;	// vertex position as a homogenous vector in NDC 
-in vec3 a_colour; // vertex colour RGB
+// Input vertex attributes
+in vec4 a_position;   // vertex position as a homogeneous vector
+in vec3 a_colour;     // vertex colour RGB
 
-out vec3 v_colour; // to fragment shader
+// Output to the fragment shader
+out vec3 v_colour;    // pass the color to the fragment shader
+
+// Uniform matrix for model transformation
+uniform mat4 u_model; // model matrix to transform the position
 
 void main() {
-	v_colour = a_colour;
+    // Apply the model matrix to transform the vertex position
+    gl_Position = u_model * a_position;
 
-	// pad the vertex to a homogeneous 3D point
-    gl_Position = a_position;
-
+    // Pass the color to the fragment shader
+    v_colour = a_colour;
 }
 

@@ -30,8 +30,12 @@ public class Scene {
 	private int colourBuffer;
 
 	private Shader shader;
+	
+	private Matrix4f modelMatrix;
+	private float time = 0;
 
 	public Scene() {
+		modelMatrix = new Matrix4f().identity();
 
 		shader = ShaderLibrary.instance.compileShader(VERTEX_SHADER, FRAGMENT_SHADER);
 
@@ -80,9 +84,31 @@ public class Scene {
 
 	}
 
-	public void draw() {
+	public void draw(float  deltaTime) {
+		
+		// Increment time
+	    time += deltaTime;
+
+	    // Set circular motion parameters
+	    float radius = 0.5f;  // Radius of the circular path
+	    float centerX = 0.0f; // Circle center X
+	    float centerY = 0.0f; // Circle center Y
+	    float speed = 1.0f;   // Rotation speed in radians per second
+	    
+	    // Compute circular path position using sine and cosine
+	    float x = centerX + radius * (float) Math.cos(speed * time);
+	    float y = centerY + radius * (float) Math.sin(speed * time);
+	    
+	 // Update model matrix with translation
+	    modelMatrix.identity()
+	        .translate(x, y, 0)
+	        .rotate(speed * time, 0, 0, 1) // Rotate with motion
+	        .scale(0.2f, 0.2f, 1.0f); // Keep the object small
+
 		
 		shader.enable();
+		
+		shader.setUniform("u_model", modelMatrix);
 		// set the attributes
 		shader.setAttribute("a_position", vertexBuffer);
 		shader.setAttribute("a_colour", colourBuffer);
@@ -134,7 +160,18 @@ public class Scene {
 
 	public static Matrix4f rotationMatrix(float angle, Matrix4f dest) {
 
-		// TODO: Your code here
+		 // Clear the matrix to the identity matrix first
+	    dest.identity();
+
+	    // Calculate cosine and sine of the angle
+	    float cos = (float) Math.cos(angle);
+	    float sin = (float) Math.sin(angle);
+
+	    // Set the rotation values for a 2D rotation matrix
+	    dest.m00(cos); // cos(theta)
+	    dest.m01(-sin); // -sin(theta)
+	    dest.m10(sin);  // sin(theta)
+	    dest.m11(cos);  // cos(theta)
 
 		return dest;
 	}
@@ -151,7 +188,12 @@ public class Scene {
 
 	public static Matrix4f scaleMatrix(float sx, float sy, Matrix4f dest) {
 
-		// TODO: Your code here
+		 // Clear the matrix to the identity matrix first
+	    dest.identity();
+
+	    // Set the scale factors for the x and y directions
+	    dest.m00(sx); // Scaling factor in the x-direction
+	    dest.m11(sy); // Scaling factor in the y-direction
 
 		return dest;
 	}
