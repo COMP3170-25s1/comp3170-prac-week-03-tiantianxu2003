@@ -85,7 +85,7 @@ public class Scene {
 	}
 	
 	private static final float TAU = (float) (2 * Math.PI);
-	private static final float ROTATION_SPEED = TAU / 6;
+	private static final float ROTATION_SPEED = TAU*2;
 	private float time = 0;
 	float radius = 0.5f; 
 
